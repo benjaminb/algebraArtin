@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+\newcommand*{\rowvec}[1]{\textbf{\sout{#1}}}
+\newcommand*{\colvec}[1]{\stackinset{c}{}{c}{}{\rule{.4pt}{2ex}}{\textbf{#1}}}
+\newcommand{\uequals}{\mathrel{\rotatebox[origin=c]{45}{$=$}}}
+\newcommand{\dequals}{\mathrel{\rotatebox[origin=c]{135}{$=$}}}
+\newcommand{\vequals}{\mathrel{\rotatebox[origin=c]{90}{$=$}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{blindtext}
+\usepackage{blkarray}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{stackengine}
+\usepackage{ulem}
+\usepackage{subfiles} % Best loaded last in the preamble
+
+\title{Subfiles package example}
+\author{Overleaf}
+\date{ }
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\subfile{chapter1.tex}
+
+\subfile{chapter2.tex}
+
+
+\end{document}

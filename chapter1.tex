@@ -1,0 +1,222 @@
+\documentclass[main.tex]{subfiles}
+\begin{document}
+\section*{Chapter 1}
+Notation: I use $\colvec{a}_i$ to denote the $i$th column of matrix $A$, and $\rowvec{a}_j$ to denote the $j$th row.
+
+
+\begin{enumerate}[label=1.\arabic*]
+\setcounter{enumi}{6}
+\item Find a formula for $\begin{bmatrix}
+    1 & 1 & 1 \\ & 1 & 1 \\ & & 1
+  \end{bmatrix}^n$, and prove it by induction.
+
+\textbf{Discussion.} Call this matrix $A$, and consider what $A$ does to $B$ in the product $BA$: $A$ places $B$'s first column in the product's first column, $B$'s column 1 + $B$'s column 2 in the product's second column, and the sum of $B$'s 3 columns in the product's third column.
+
+\[
+  BA=
+  \left[
+    \begin{array}{ccc}
+      \vertbar       & \vertbar                      & \vertbar                                   \\
+      \mathbf{b}_{1} & \mathbf{b}_1 + \mathbf{b}_{2} & \mathbf{b}_1 + \mathbf{b}_2 + \mathbf{b}_3 \\
+      \vertbar       & \vertbar                      & \vertbar
+    \end{array}
+    \right]
+\]
+\[
+  A^2 = AA=
+  \left[
+    \begin{array}{ccc}
+      \vertbar       & \vertbar                      & \vertbar                                   \\
+      \mathbf{a}_{1} & \mathbf{a}_1 + \mathbf{a}_{2} & \mathbf{a}_1 + \mathbf{a}_2 + \mathbf{a}_3 \\
+      \vertbar       & \vertbar                      & \vertbar
+    \end{array}
+    \right]
+\]
+
+If the left matrix is itself $A$, we can guess that repeated application of $A$ on the right will leave column 1 unchanged, so we suppose the first column of $A^n = (1, 0, 0)$. If this is correct, each right-multiplication by $A$ adds $(1, 0, 0)$ to $(1, 1, 0)$, making column 2 of $A^n = (n, 1, 0)$. For column 3 of $A^2$ we add $(1, 0, 0) + (1, 1, 0)  + (1, 1, 1) = (3, 2, 1)$. For column 3 of $A^3$ we add $(1, 0, 0) + (2, 1, 0) + (3, 2, 1)$, and we suspect that in $A^n$'s 3rd column, the first entry is the sum $1 + 2 + \ldots + n$. So we guess the third column is $(\sum_{k=1}^n k , n , 1)$. The sum of the first k natural numbers has a well-known closed
+form, $n(n+1)/2$, so we can now claim:
+$$A^n = \begin{bmatrix} 1 & n & \frac{n(n+1)}{2} \\ & 1 & n \\ & & 1 \end{bmatrix}$$
+
+\textbf{Proof by induction.}
+
+For the base case we may use $n = 1$. Then $\frac{n(n+1)}{2} = 1(2)/2 = 1$ and the base case holds.
+Assuming this holds for some $n$, for the inductive step we would have:
+\begin{align*}
+  A^{n+1} & = A^n A                       & \text{associativity} \\
+          & = \begin{bmatrix} 1 & n & \frac{n(n+1)}{2} \\ & 1 & n \\ & & 1 \end{bmatrix} A                        \\
+          & = \begin{bmatrix} 1 & n + 1 & \frac{n(n+1)}{2} + n + 1 \\ & 1 & n + 1 \\ & & 1 \end{bmatrix}
+\end{align*}
+
+The diagonal and superdiagonal are as we claimed. The top-right entry can be rewritten as:
+$$\frac{n(n+1)}{2} + n + 1 = \frac{n(n+1) + 2n + 2}{2} = \frac{n^2 + 3n + 2}{2} = \frac{(n+1)(n+2)}{2}$$
+
+which is also as claimed. Thus the proof is complete.
+\setcounter{enumi}{13}
+\item Find infinitely many matrices $B$ such that $BA = I_2$ when
+$$A = \begin{bmatrix} 2 & 3 \\ 1 & 2 \\ 1 & 1 \end{bmatrix}$$
+and prove there is no matrix $C$ such that $AC = I_3$.
+
+\textbf{Discussion.} To find infinitely many solutions, we can find a vector that when added to
+$B$ doesn't change the product $BA$. By the row picture of matrix multiplication, the rows of $B$ specify linear combinations $A$ rows to make the product $BA$. So we'll look for a linear combination of $A$ rows that sum to \textbf{0}. Then any multiple of this linear combination will also be \textbf{0}, and can be added to $B$ without changing $BA$. Technically, we seek a vector in $A$'s left null space.
+
+Consider the row space of $A$: there are three vectors in a 2-dimensional space so they
+must be linearly dependent. In fact we might see that the first row is the sum of the other two, and so
+$\rowvec{a}_1 - \rowvec{a}_2 - \rowvec{a}_3 = \mathbf{0}$. Therefore the row vector $[1 \ -1\  -1]$ is in $A$'s left null
+space:
+$$\lambda \begin{bmatrix} 1 & -1 & -1 \end{bmatrix} A = \mathbf{0}$$
+
+Let $N = \begin{bmatrix} 1 & -1 & -1 \\ 1 & -1 & -1 \end{bmatrix}$, stacking this vector. Then:
+$$NA = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}, \text{ and } (B + \lambda N)A = BA + \lambda NA = BA + 0 = BA$$
+
+Next we seek a matrix $\tilde{B}$ such that $\tilde{B}A = I_2$. We could ignore $A$'s third row and invert the 2-by-2
+matrix $\begin{bmatrix} 2 & 3 \\ 1 & 2 \end{bmatrix}$, its inverse is $\begin{bmatrix} 2 & -3 \\ -1 & 2 \end{bmatrix}$.
+To make it the right size we append a column of zeros to get:
+
+$$\tilde{B} = \begin{bmatrix} 2 & -3 & 0 \\ -1 & 2 & 0 \end{bmatrix}, \quad \tilde{B}A = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} = I_2$$
+
+
+Now we can let $B = \tilde{B} + \lambda N$ for any choice of scalar $\lambda$, and we'll have:
+$$BA = (\tilde{B} + \lambda N) A = \tilde{B}A = I_2$$
+
+To prove that there $A$ has no right-inverse $C$, observe that $A$ has 2 linearly independent columns and a 3-dimensional
+codomain. By rank-nullity, $A$ is not full-rank and cannot produce $I_3$.
+
+\item With $A$ arbitrary, determine the products $e_{ij}A, Ae_{ij}, e_j A e_k, e_{ii}Ae_{jj}$, and $e_{ij}Ae_{k\ell}$
+
+\textbf{Discussion.} Note that Artin defines $e_{ij}$ as a `unit matrix', a matrix with a 1 at the $(i, j)$ coordinate and
+0 elsewhere.
+
+\begin{itemize}
+\item $e_{ij}A$: since $e_{ij}$ is multiplying $A$ on the left, it is making linear combinations of $A$'s rows.
+Since it only has a 1 in column $j$ it extracts the $j$th row of $A$ and puts in in the $i$th row of the product, which
+is 0 everywhere else.
+
+\[
+  e_{ij}A =             \begin{blockarray}{cccccc}
+    &   & j &   &  \\
+    \begin{block}{c[ccccc]}
+      &  &  &  &  &  \\
+      &  &  &  &  &  \\
+      i & & 1 &  &  &  \\
+      & & & & & \\
+      & & & & & \\
+    \end{block}
+  \end{blockarray}
+  \left[\begin{array}{ccc}
+      \horzbar & \mathbf{a}_1 & \horzbar \\
+               & \vdots       &          \\
+      \horzbar & \mathbf{a}_j & \horzbar \\
+               & \vdots       &          \\
+      \horzbar & \mathbf{a}_n & \horzbar\end{array}\right]
+  =
+  \begin{blockarray}{cccc}
+    \begin{block}{c[ccc]}
+      &  &  &   \\
+      &  &  &  \\
+      i & \horzbar & \mathbf{a}_j & \horzbar   \\
+      & & &  \\
+      & & & \\
+    \end{block}
+  \end{blockarray}
+\]
+
+\item $Ae_{ij}$: Note that the $j$th column of $e_{ij}$ is also the $i$th basis vector $e_i$.
+Multiplying $A$ by a basis vector $e_i$ simply extracts the $i$th column from $A$:
+$Ae_i = \mathbf{a}_i$. Next, consider that in $e_{ij}$ there are $j-1$ columns of $\mathbf{0}$ before the $\mathbf{e}_j$
+column. So $Ae_{ij}$ is a matrix with $\mathbf{a}_i$ in the $j$th column and 0's everywhere else.
+
+
+\[
+  Ae_j =
+  \begin{array}{cc}
+                                            & \left[\begin{array}{c}
+        \vertbar \\
+        e_i      \\
+        \vertbar
+      \end{array}\right] \\
+    \left[\begin{array}{ccc}
+        \vertbar     &        & \vertbar     \\
+        \mathbf{a}_1 & \ldots & \mathbf{a}_n \\
+        \vertbar     &        & \vertbar     \\
+      \end{array}\right] & \left[\begin{array}{cc} \vertbar \\ \mathbf{a}_i \\ \vertbar \end{array}\right]
+  \end{array}
+\]
+\[
+  Ae_{ij} = \begin{array}{cc}
+  & \begin{blockarray}{ccccc}
+    &  & j & \\
+    \begin{block}{[ccccc]}
+      & \vertbar & \vertbar & \vertbar & \\
+      \ldots & \mathbf{0} & e_i & \mathbf{0} & \ldots \\
+      & \vertbar & \vertbar & \vertbar & \\
+    \end{block}
+  \end{blockarray} \\
+  \begin{blockarray}{ccc}\begin{block}{[ccc]} % MATRIX A
+      \vertbar & & \vertbar \\
+      \mathbf{a}_1 & \ldots & \mathbf{a}_n \\
+      \vertbar & & \vertbar \\
+    \end{block}\end{blockarray} &
+  \begin{blockarray}{ccccc} % PRODUCT
+  \begin{block}{[ccccc]}
+  & \vertbar & \vertbar & \vertbar & \\
+  \ldots & \mathbf{0} & \mathbf{a}_i & \mathbf{0} & \ldots \\
+  & \vertbar & \vertbar & \vertbar & \\
+  \end{blockarray}
+  \end{array}
+\]
+
+Alternatively, we can write $Ae_{ij} = (e_{ij}^\top A^\top)^\top = (e_{ji}A^\top)^\top$ and use the previous
+result: $e_{ji}A^\top$ places the $i$th row of $A^\top$ in the $j$th row of the product, then the transpose
+$(e_{ji}A^\top)^\top$ has the $i$th \textit{row} of $A$ in the $j$th \textit{column}
+(and zeros everywhere else).
+
+\item $e_j A e_k$: the product $e_j A$ is not defined for an arbitrary $A$. Suppose $e_j$ is $m \times 1$, then
+for $e_j A$ to be defined $A$ must have the shape $1 \times n$. Then $e_k$ must be $n \times 1$ for the
+product $e_j A e_k$ to be defined. It would be very unconventional for $e_j$ and $e_k$ to have different
+shapes, but nevertheless $Ae_k$ would be the single entry matrix $[a_{1k}]$, which then multiplies $e_j$
+like a scalar to produce $a_{1k} e_j$.
+
+In case Artin intended the product to read $e_j^\top A e_k$, the answer would be that $e_j^\top A$ extracts
+the $j$th row of $A$, then multiplying by $e_k$ extracts the $k$th component of that row: $e_j^\top A e_k =
+  a_{jk}$
+
+\item $e_{ii}Ae_{jj}$: using previous results, $Ae_{jj}$ has the effect of zeroing out $A$ except for the $j$th
+column. Multiplying this by $e_{ii}$ on the left zeros out everything but the $i$th row, which leaves only
+$a_{ij}$ and zeros everywhere else: $e_{ii}Ae_{jj} =a_{ij} e_{ij}$ .
+
+\item $e_{ij}Ae_{k\ell}$: the product $Ae_{k\ell}$ is a matrix with $\colvec{a}_k$ in the $\ell$th column and
+zeros everywhere else. Multiplying this by $e_{ij}$ on the left takes the $j$th component of this column, $a_{jk}$, and
+places it in the $i$th row of the product, with zeros everywhere else. Therefore we have only $a_{jk}$ in the
+$(i, \ell)$ entry, or $a_{jk}e_{i\ell}$.
+\end{itemize}
+
+\end{enumerate}
+
+
+% END SECTION 1
+
+\section*{Exercises from 1st edition}
+
+\textbf{1.1.16} A square matrix $A$ is called \textit{nilpotent} if $A^k = 0$ for some $k > 0$. Prove that if $A$ is nilpotent
+then $I + A$ is invertible.
+
+\subsubsection*{Discussion} If $I + A$ is invertible then its inverse is some matrix $(I + A)^{-1}$. If we consider this a function of $A$ then we find that it is infinitely differentiable and we might attempt to evaluate its Maclaurin series. Note the resemblance to a geometric series:
+
+$$f(A) = (I + A)^{-1} = I - A + A^2 - A^3 + \ldots$$
+
+
+Since $A$ is nilpotent all powers of $A$ from $k$ onwards are 0, so this is really a finite sum:
+$$(I+A)^{-1} = I - A + A^2 - \ldots (-1)^{k-1}A^{k-1}$$
+
+We'll assume Artin meant that $k$ is the \textit{lowest} integer such that $A^k = \mathbf{0}$.
+
+\subsubsection*{Proof}
+We check if it inverts $I + A$, and indeed it does:
+$$(I + A)(I - A + A^2 - \ldots (-1)^{k-1}A^{k-1})$$
+$$= \left(I(I - A + A^2 - \ldots (-1)^{k-1}A^{k-1})\right)+ \left(A(I - A + A^2 - \ldots (-1)^{k-1}A^{k-1})\right).$$
+$$=I + A - A + A^2 - A^2 + \ldots (-1)^{k-1}A^{k-1} + (-1)^{k-2}A^{k-1} + 0$$
+$$ = I$$
+
+which confirms that $I + A - A^2 + \ldots (-1)^{k-1}A^{k-1}$ is indeed the inverse of $I + A$.
+
+\end{document}
